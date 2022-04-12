@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title>Time Card Calculator</title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="tc_style.css">
+        <script type="text/javascript" src="time_cards.js"></script>
+    </head>
+    <body>
+        <div class="shell-container">
+            <div class="box_div" id="input_div">
+
+                <div id="date_input_div">
+                    <label class="box_label" for="start_date" >Period Start: </label>
+                    <input class="time_date_input_box" type="date" id="start_date" name="date">
+                    <label class="box_label" for="end_date">Period End: </label>
+                    <input class="time_date_input_box" type="date" id="end_date" name="date">
+
+
+                    <label class="curr_day_label" for="curr_day_p" id="curr_day_label">Current Day:</label>
+                    <p class="time_period" data-date_idx='0' id="curr_day_p">Saturday - 09/03/2016</p>
+                    <input type="image" name="check_button" id="check_button" data-color=0 src="images/icons/white_checkmark.png"/ onclick="set_reset_pay_period(); build_out_employees();"></button>
+                    
+                </div>
+
+                <div id="employee_select_div">
+                    <label class="box_label"  for="employees_sel" id="employee_sel_label">Employee: </label>
+                    <select name="employee_sel" id="employee_sel" onchange="enable_in_time(0); jump_to_next('in_time_0', 0)" disabled>
+                        <option value="" disabled selected hidden>Employee</option>
+                        <option value="dylan">Dylan</option>
+                        <option value="chino">Chino</option>
+                        <option value="sawyer">Sawyer</option>
+                        <option value="adam">Adam</option>
+                        <option value="jacob">Jacob</option>
+                        <option value="justin">Justin</option>
+                        <option value="tyler">Tyler</option>
+                        <!--<option value="add">Add Employee...</option>-->
+                    </select>
+                </div>
+                
+                <div id="time_input_div">
+
+                    <label class="box_label" for="in_time_0">In: </label>
+                    <input class="time_date_input_box" type="time" id="in_time_0" name="in_time_0" onchange="smooth_time(id); enable_out_time_input(id); jump_to_next(id, 1, 0)" disabled>
+                    <p class="adj_time" id="in_time_0_p" data-minutes='0'>--:--</p>
+                        
+                    <label class="box_label" for="out_time_0">Out: </label>
+                    <input class="time_date_input_box" type="time" id="out_time_0" name="out_time_0" onchange="smooth_time(id); build_wp(id); enable_in_time(1); jump_to_next(id, 2, 1); enable_button('manual_lunch_btn')" disabled>
+                    <p class="adj_time" id="out_time_0_p" data-minutes='0'>--:--</p>
+                          
+                    <label class="box_label" for="in_time_1">In: </label>
+                    <input class="time_date_input_box" type="time" id="in_time_1" name="in_time_1" onchange="smooth_time(id); enable_out_time_input(id); jump_to_next(id, 1, 0)" disabled>
+                    <p class="adj_time" id="in_time_1_p" data-minutes='0'>--:--</p>
+                    
+                    <label class="box_label" for="out_time_1">Out: </label>
+                    <input class="time_date_input_box" type="time" id="out_time_1" name="out_time_1" onchange="smooth_time(id); build_wp(id); enable_in_time(2); jump_to_next(id, 2, 1);" disabled>
+                    <p class="adj_time" id="out_time_1_p" data-minutes='0'>--:--</p>
+
+                    <label class="box_label" for="in_time_2" id="in_time_2_label">In: </label>
+                    <input class="time_date_input_box" type="time" id="in_time_2" name="in_time_2" onchange="smooth_time(id); enable_out_time_input(id); jump_to_next(id, 1, 0)" disabled>
+                    <p class="adj_time" id="in_time_2_p" data-minutes='0'>--:--</p>
+                        
+                    <label class="box_label" for="out_time_2" id="out_time_2_label">Out: </label>
+                    <input class="time_date_input_box" type="time" id="out_time_2" name="out_time_2" onchange="smooth_time(id); build_wp(id); enable_in_time(3); jump_to_next(id, 2, 1);" disabled>
+                    <p class="adj_time" id="out_time_2_p" data-minutes='0' >--:--</p>
+                          
+                    <label class="box_label" for="in_time_3" id="in_time_3_label">In: </label>
+                    <input class="time_date_input_box" type="time" id="in_time_3" name="in_time_3" onchange="smooth_time(id); enable_out_time_input(id); jump_to_next(id, 1, 0)"disabled>
+                    <p class="adj_time" id="in_time_3_p" data-minutes='0'>--:--</p>
+                    
+                    <label class="box_label" for="out_time_3" id="out_time_3_label">Out: </label>
+                    <input class="time_date_input_box" type="time" id="out_time_3" name="out_time_3" onchange="smooth_time(id); build_wp(id)" disabled>
+                    <p class="adj_time" id="out_time_3_p" data-minutes='0'>--:--</p>
+
+                    <!---
+                    <div id="add_time_period_div" hidden>
+                        <button class="button" id="add_time_period_btn" onclick="enable_period_input()" hidden disabled>Add Period</button>
+                    </div>
+                    -->
+
+                    <div id="add_manual_lunch_div">
+                        <button class="button" id="manual_lunch_btn" onclick="select_deselect_button(this.id); toggle_manual_lunch()" disabled>Add 30-Min Lunch</button>
+                    </div>
+
+                    <div id="shift_day_div">
+                        <button class="button shift_day" id="prev_day_btn">&larr; Prev Day</button>
+                        <button class="button shift_day" id="next_day_btn">Next Day &rarr;</button>
+                    </div>
+
+
+                </div>
+            </div>
+
+            <div class="box_div" id="hour_log_box">
+                <div id="time_output_div">
+                    <div id="week_1">
+                        <div class="day_hour_display w1">
+                            <label class="box_label day_label" for="test_input" id="0_0_hour_label">Sunday: </label>
+                            <p type="text" class="daily_hour_log" id="0_0_hour_log" onclick="highlight_date_log(this.id); load_user_inputs(); clear_time_inputs()">0 Hrs 0 Min</p>
+                        </div>
+
+                        <div class="day_hour_display w1">
+                            <label class="box_label day_label" for="0_1_hour_log" id="0_1_hour_label">Monday: </label>
+                            <p class="daily_hour_log" id="0_1_hour_log" onclick="highlight_date_log(this.id); load_user_inputs(); clear_time_inputs()">0 Hrs 0 Min</p>
+                        </div>
+
+                        <div class="day_hour_display w1">
+                            <label class="box_label day_label" for="0_2_hour_log" id="0_2_hour_label">Tuesday: </label>
+                            <p class="daily_hour_log" id="0_2_hour_log" onclick="highlight_date_log(this.id); load_user_inputs(); clear_time_inputs()">0 Hrs 0 Min</p>
+                        </div>
+
+                        <div class="day_hour_display w1">
+                            <label class="box_label day_label" for="0_3_hour_log" id="0_3_hour_label">Wednesday: </label>
+                            <p class="daily_hour_log" id="0_3_hour_log" onclick="highlight_date_log(this.id); load_user_inputs(); clear_time_inputs()">0 Hrs 0 Min</p>
+                        </div>
+
+                        <div class="day_hour_display w1">
+                            <label class="box_label day_label" for="0_4_hour_log" id="0_4_hour_label">Thursday: </label>
+                            <p class="daily_hour_log" id="0_4_hour_log" onclick="highlight_date_log(this.id); load_user_inputs(); clear_time_inputs()">0 Hrs 0 Min</p>
+                        </div>
+
+                        <div class="day_hour_display w1">
+                            <label class="box_label day_label" for="0_5_hour_log" id="0_5_hour_label">Friday: </label>
+                            <p class="daily_hour_log" id="0_5_hour_log" onclick="highlight_date_log(this.id); load_user_inputs(); clear_time_inputs()">0 Hrs 0 Min</p>
+                        </div>
+                        
+                        <div class="day_hour_display w1">
+                            <label class="box_label day_label" for="0_6_hour_log" id="0_6_hour_label">Saturday: </label>
+                            <p class="daily_hour_log" id="0_6_hour_log" onclick="highlight_date_log(this.id); load_user_inputs(); clear_time_inputs()">0 Hrs 0 Min</p>
+                        </div>
+                    </div>
+                    
+                    <div id="week_2">
+                        <div class="day_hour_display w2">
+                            <label class="box_label day_label" for="1_0_hour_log" id="1_0_hour_label">Sunday: </label>
+                            <p class="daily_hour_log" id="1_0_hour_log" onclick="highlight_date_log(this.id); load_user_inputs(); clear_time_inputs()">0 Hrs 0 Min</p>
+                        </div>
+
+                        <div class="day_hour_display w2">
+                            <label class="box_label day_label" for="1_1_hour_log" id="1_1_hour_label">Monday: </label>
+                            <p class="daily_hour_log" id="1_1_hour_log" onclick="highlight_date_log(this.id); load_user_inputs(); clear_time_inputs()">0 Hrs 0 Min</p>
+                        </div>
+
+                        <div class="day_hour_display w2">
+                            <label class="box_label day_label" for="1_2_hour_log" id="1_2_hour_label">Tuesday: </label>
+                            <p class="daily_hour_log" id="1_2_hour_log" onclick="highlight_date_log(this.id); load_user_inputs(); clear_time_inputs()">0 Hrs 0 Min</p>
+                        </div>
+
+                        <div class="day_hour_display w2">
+                            <label class="box_label day_label" for="1_3_hour_log" id="1_3_hour_label">Wednesday: </label>
+                            <p class="daily_hour_log" id="1_3_hour_log" onclick="highlight_date_log(this.id); load_user_inputs(); clear_time_inputs()">0 Hrs 0 Min</p>
+                        </div>
+
+                        <div class="day_hour_display w2">
+                            <label class="box_label day_label" for="1_4_hour_log" id="1_4_hour_label">Thursday: </label>
+                            <p class="daily_hour_log" id="1_4_hour_log" onclick="highlight_date_log(this.id); load_user_inputs(); clear_time_inputs()">0 Hrs 0 Min</p>
+                        </div>
+
+                        <div class="day_hour_display w2">
+                            <label class="box_label day_label" for="1_5_hour_log" id="1_5_hour_label">Friday: </label>
+                            <p class="daily_hour_log" id="1_5_hour_log" onclick="highlight_date_log(this.id); load_user_inputs(); clear_time_inputs()">0 Hrs 0 Min</p>
+                        </div>
+                        
+                        <div class="day_hour_display w2">
+                            <label class="box_label day_label" for="1_6_hour_log" id="1_6_hour_label">Saturday: </label>
+                            <p class="daily_hour_log" id="1_6_hour_log" onclick="highlight_date_log(this.id); load_user_inputs(); clear_time_inputs()">0 Hrs 0 Min</p>
+                        </div>
+                    </div>
+                    <div id="week_3">
+                        <div class="day_hour_display w3">
+                            <label class="box_label day_label" for="2_0_hour_log" id="2_0_hour_label">Sunday: </label>
+                            <p class="daily_hour_log" id="2_0_hour_log" onclick="highlight_date_log(this.id); load_user_inputs(); clear_time_inputs()">0 Hrs 0 Min</p>
+                        </div>
+                        
+                        <div class="day_hour_display w2">
+                            <label class="box_label day_label" for="2_1_hour_log" id="2_1_hour_label">Monday: </label>
+                            <p class="daily_hour_log" id="2_1_hour_log" onclick="highlight_date_log(this.id); load_user_inputs(); clear_time_inputs()">0 Hrs 0 Min</p>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+            <div id="calc_btn_div">
+                <button class="button" id="calculate_btn" onclick="iterate_inputs(time_input_div)" disabled>Calculate</button>
+            </div>
+        </div>
+        <script>//MOVE THIS
+            estimate_period_start();
+            
+        </script>
+        <script src="" async defer></script>
+    </body>
+</html>
