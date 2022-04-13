@@ -396,8 +396,6 @@ function convert_min_to_hrs(min_in, period){
     document.getElementById(period).innerHTML = hrs + " hrs " + min + " min";
 }
 
-
-
 function getDaysInMonth(month,year) {
     return new Date(year, month+1, 0).getDate();
 };
