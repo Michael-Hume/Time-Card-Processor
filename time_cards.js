@@ -418,7 +418,6 @@ function update_hour_log_days(start_day, month, start_date){
             temp_start_day = 0;
         }
     }
-
     // Highlight the starting day
     highlight_date_log(hour_log_day_labels[0].replace("label", "log"));
 }
